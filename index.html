@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>For Dhuli — Shayari & Poetry</title>
+<meta name="description" content="Shayari and poetry in English, Hindi and Gujarati, written for Dhuli.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Great+Vibes&family=Poppins:wght@300;400;500&family=Noto+Serif+Devanagari:wght@400;500;600&family=Noto+Serif+Gujarati:wght@400;500;600&family=Noto+Sans+Devanagari:wght@400;500&family=Noto+Sans+Gujarati:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg1:#0b0a1f; --bg2:#1a0f33; --bg3:#2a1240;
+    --gold:#e8c27a; --gold-soft:#f5dfb0; --rose:#e98ba7; --rose-deep:#b84a73;
+    --ink:#f4ecff; --muted:#b9acd6;
+    --glass:rgba(255,255,255,.06); --glass-b:rgba(232,194,122,.22);
+    --serif:'Cormorant Garamond',Georgia,serif; --script:'Great Vibes',cursive; --sans:'Poppins',system-ui,sans-serif;
+    --lh:1.6; --txt:1.38rem; --tt:2rem; --tw:400;
+  }
+  /* Language-aware typography: applies to the page and to individual cards/modal */
+  [data-l="hi"],body[data-lang="hi"]{
+    --serif:'Noto Serif Devanagari','Cormorant Garamond',serif; --script:'Noto Serif Devanagari',serif;
+    --sans:'Poppins','Noto Sans Devanagari',sans-serif; --lh:1.95; --txt:1.2rem; --tt:1.5rem; --tw:600;
+  }
+  [data-l="gu"],body[data-lang="gu"]{
+    --serif:'Noto Serif Gujarati','Cormorant Garamond',serif; --script:'Noto Serif Gujarati',serif;
+    --sans:'Poppins','Noto Sans Gujarati',sans-serif; --lh:1.95; --txt:1.15rem; --tt:1.45rem; --tw:600;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--sans); color:var(--ink); min-height:100vh;
+    background:radial-gradient(1200px 800px at 80% -10%,var(--bg3),transparent 60%),
+               radial-gradient(900px 700px at 0% 100%,#3a0f3a55,transparent 60%),
+               linear-gradient(180deg,var(--bg1),var(--bg2));
+    background-attachment:fixed; overflow-x:hidden;
+  }
+  body.locked{overflow:hidden}
+  #sky{position:fixed;inset:0;z-index:0;pointer-events:none}
+  main,header,footer{position:relative;z-index:2}
+
+  /* ---------- Intro ---------- */
+  #intro{
+    position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;padding:24px;
+    background:radial-gradient(800px 600px at 50% 40%,#2b1450,#0b0a1f 70%);
+    transition:opacity 1.2s ease,visibility 1.2s;
+  }
+  #intro.gone{opacity:0;visibility:hidden}
+  #intro .small{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(1.1rem,3vw,1.5rem);color:var(--muted);opacity:0;animation:fadeUp 1.6s .4s forwards}
+  #intro h1{
+    font-family:'Great Vibes',cursive;font-weight:400;font-size:clamp(4rem,16vw,9rem);line-height:1.1;margin:.2em 0;
+    background:linear-gradient(120deg,var(--gold-soft),var(--gold),var(--rose));-webkit-background-clip:text;background-clip:text;color:transparent;
+    min-height:1.2em;filter:drop-shadow(0 0 24px rgba(232,194,122,.35));
+  }
+  #intro h1 .caret{display:inline-block;width:3px;height:.8em;background:var(--gold);margin-left:4px;vertical-align:middle;animation:blink .9s infinite}
+  #intro .sub{font-family:'Cormorant Garamond',serif;font-size:clamp(1rem,2.6vw,1.3rem);color:var(--gold-soft);letter-spacing:.12em;opacity:0;transition:opacity 1.5s}
+  #intro .sub.show{opacity:1}
+  .choose{margin-top:2rem;opacity:0;pointer-events:none;transition:opacity 1.2s}
+  .choose.show{opacity:1;pointer-events:auto}
+  .choose .label{font-size:.8rem;letter-spacing:.14em;color:var(--muted);margin-bottom:16px;font-family:'Poppins','Noto Sans Devanagari','Noto Sans Gujarati',sans-serif}
+  .lang-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .lang-btn{
+    min-width:132px;font:500 1.02rem 'Poppins','Noto Sans Devanagari','Noto Sans Gujarati',sans-serif;color:#1a0f33;
+    background:linear-gradient(120deg,var(--gold-soft),var(--gold));border:0;border-radius:999px;padding:14px 30px;cursor:pointer;
+    transition:transform .3s,box-shadow .3s;box-shadow:0 0 0 0 rgba(232,194,122,.5);
+  }
+  .choose.show .lang-btn{animation:pulse 2.6s infinite}
+  .lang-btn:nth-child(2){animation-delay:.3s}.lang-btn:nth-child(3){animation-delay:.6s}
+  .lang-btn:hover{transform:translateY(-3px)}
+  .hint{margin-top:16px;font-size:.78rem;color:var(--muted);opacity:0;transition:opacity 1.4s}
+  .hint.show{opacity:.8}
+
+  /* ---------- Nav ---------- */
+  nav{
+    position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+    padding:12px clamp(16px,4vw,48px);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    background:linear-gradient(180deg,rgba(11,10,31,.75),rgba(11,10,31,.25));border-bottom:1px solid rgba(232,194,122,.1);
+  }
+  .brand{font-family:var(--script);font-size:1.9rem;color:var(--gold);font-weight:var(--tw)}
+  body:not([data-lang="en"]) .brand{font-size:1.5rem}
+  .nav-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .pill{
+    display:inline-flex;align-items:center;gap:8px;font:400 .82rem var(--sans);color:var(--ink);cursor:pointer;
+    background:var(--glass);border:1px solid var(--glass-b);border-radius:999px;padding:9px 16px;transition:.25s;
+  }
+  .pill:hover{background:rgba(232,194,122,.14);transform:translateY(-1px)}
+  .pill.on{background:rgba(232,194,122,.2);border-color:var(--gold)}
+  .pill .count{background:var(--rose-deep);color:#fff;border-radius:999px;font-size:.7rem;padding:1px 7px;min-width:20px;text-align:center}
+  .langs{display:flex;gap:4px;padding:3px;border-radius:999px;background:var(--glass);border:1px solid var(--glass-b)}
+  .langs button{font:500 .8rem var(--sans);color:var(--muted);background:transparent;border:0;border-radius:999px;padding:7px 13px;cursor:pointer;transition:.25s}
+  .langs button.active{background:linear-gradient(120deg,var(--gold-soft),var(--gold));color:#1a0f33}
+
+  /* ---------- Hero ---------- */
+  .hero{text-align:center;padding:clamp(48px,9vw,110px) 20px 36px}
+  .hero .eyebrow{font-size:.78rem;letter-spacing:.35em;text-transform:uppercase;color:var(--rose)}
+  .hero h2{font-family:var(--serif);font-weight:500;font-size:clamp(2.2rem,6.4vw,4.6rem);line-height:1.2;margin:.35em 0 .3em}
+  .hero h2 em{font-family:var(--script);font-style:normal;font-weight:400;color:var(--gold);font-size:1.25em}
+  body:not([data-lang="en"]) .hero h2 em{font-size:1em;font-weight:600}
+  .hero p{max-width:600px;margin:0 auto;color:var(--muted);font-family:var(--serif);font-size:clamp(1.05rem,2.5vw,1.35rem);font-style:italic;line-height:1.8}
+  body:not([data-lang="en"]) .hero p{font-style:normal}
+  .divider{display:flex;align-items:center;justify-content:center;gap:14px;margin:28px auto 0;color:var(--gold)}
+  .divider::before,.divider::after{content:"";height:1px;width:80px;background:linear-gradient(90deg,transparent,var(--gold))}
+  .divider::after{transform:scaleX(-1)}
+
+  /* ---------- Tabs ---------- */
+  .tabs{display:flex;justify-content:center;gap:10px;margin:30px 0 10px;flex-wrap:wrap;padding:0 16px}
+  .tab{
+    font:500 .85rem var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);cursor:pointer;
+    background:transparent;border:1px solid transparent;border-radius:999px;padding:11px 26px;transition:.3s;
+  }
+  .tab:hover{color:var(--ink)}
+  .tab.active{color:#1a0f33;background:linear-gradient(120deg,var(--gold-soft),var(--gold));box-shadow:0 8px 30px -10px rgba(232,194,122,.6)}
+
+  /* ---------- Cards ---------- */
+  .wrap{max-width:1180px;margin:0 auto;padding:20px clamp(16px,4vw,40px) 80px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:26px}
+  .card{
+    position:relative;border-radius:22px;padding:34px 30px 24px;overflow:hidden;
+    background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.02));
+    border:1px solid var(--glass-b);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    opacity:0;transform:translateY(34px);transition:opacity .9s ease,transform .9s ease,box-shadow .4s,border-color .4s;
+    display:flex;flex-direction:column;
+  }
+  .card.in{opacity:1;transform:none}
+  .card:hover{box-shadow:0 24px 60px -24px rgba(233,139,167,.45);border-color:rgba(232,194,122,.5)}
+  .card::before{content:"“";position:absolute;top:-14px;left:18px;font-family:'Cormorant Garamond',serif;font-size:7rem;color:rgba(232,194,122,.13);line-height:1}
+  .card .num{font-size:.72rem;letter-spacing:.25em;color:var(--rose);text-transform:uppercase;margin-bottom:14px;font-family:var(--sans)}
+  .card .title{font-family:var(--script);font-weight:var(--tw);font-size:var(--tt);color:var(--gold);margin-bottom:8px;line-height:1.4}
+  .card .text{font-family:var(--serif);font-size:var(--txt);line-height:var(--lh);font-weight:500;flex:1;color:var(--ink)}
+  .card .text span{display:block}
+  .card .more{font-family:var(--serif);font-style:italic;color:var(--muted);margin-top:6px}
+  .card .pen{margin-top:16px;text-align:right;font-family:var(--script);font-weight:var(--tw);font-size:1.5rem;color:var(--rose);line-height:1.3}
+  [data-l="hi"] .pen,[data-l="gu"] .pen{font-size:1.15rem}
+  .card .actions{display:flex;gap:8px;margin-top:22px;padding-top:16px;border-top:1px solid rgba(255,255,255,.08);align-items:center}
+  .icon-btn{
+    width:40px;height:40px;border-radius:50%;display:grid;place-items:center;cursor:pointer;flex:none;
+    background:var(--glass);border:1px solid var(--glass-b);color:var(--ink);transition:.25s;
+  }
+  .icon-btn:hover{background:rgba(232,194,122,.16);transform:translateY(-2px)}
+  .icon-btn.fav.on{background:rgba(233,139,167,.2);border-color:var(--rose);color:var(--rose)}
+  .icon-btn.fav.on svg{fill:var(--rose)}
+  .icon-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .read{margin-left:auto;font:500 .78rem var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--gold);background:none;border:0;cursor:pointer;padding:8px 4px}
+  .read:hover{color:var(--gold-soft)}
+  .section-title{grid-column:1/-1;text-align:center;font-family:var(--serif);font-size:1.5rem;font-style:italic;color:var(--muted);margin:10px 0 0}
+  .empty{grid-column:1/-1;text-align:center;font-family:var(--serif);font-style:italic;font-size:1.4rem;color:var(--muted);padding:60px 0;line-height:1.8}
+
+  /* ---------- Modal ---------- */
+  #modal{
+    position:fixed;inset:0;z-index:80;display:none;align-items:center;justify-content:center;padding:20px;
+    background:rgba(6,5,18,.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  }
+  #modal.open{display:flex;animation:fade .4s}
+  .sheet{
+    position:relative;width:min(680px,100%);max-height:88vh;overflow:auto;border-radius:26px;padding:clamp(28px,5vw,56px);
+    background:linear-gradient(160deg,#241046,#150a2b);border:1px solid var(--glass-b);box-shadow:0 40px 120px -30px rgba(233,139,167,.35);text-align:center;
+  }
+  .sheet h3{font-family:var(--script);font-weight:var(--tw);font-size:clamp(2.2rem,6vw,3.4rem);color:var(--gold);margin-bottom:18px;line-height:1.35}
+  [data-l="hi"].sheet h3,[data-l="gu"].sheet h3{font-size:clamp(1.7rem,5vw,2.4rem)}
+  .sheet .lines span{display:block;font-family:var(--serif);font-size:clamp(1.1rem,3.2vw,1.45rem);line-height:var(--lh);opacity:0;animation:fadeUp .9s forwards}
+  .sheet .sign{margin-top:26px;font-family:var(--script);font-size:1.8rem;color:var(--rose);font-weight:var(--tw)}
+  .close{position:absolute;top:16px;right:16px}
+  .sheet .actions{display:flex;justify-content:center;gap:10px;margin-top:22px}
+
+  /* ---------- Closing ---------- */
+  .closing{text-align:center;padding:60px 20px 90px}
+  .closing .big{font-family:var(--script);font-size:clamp(2.6rem,8vw,5rem);color:var(--gold);font-weight:var(--tw)}
+  body:not([data-lang="en"]) .closing .big{font-size:clamp(2rem,6vw,3.2rem)}
+  .closing p{font-family:var(--serif);font-style:italic;font-size:1.3rem;color:var(--muted);max-width:540px;margin:10px auto 0;line-height:1.8}
+  body:not([data-lang="en"]) .closing p{font-style:normal}
+  .closing .sign{font-family:var(--script);font-size:2rem;color:var(--rose);margin-top:18px;font-weight:var(--tw)}
+  footer{text-align:center;padding:26px 16px 40px;color:var(--muted);font-size:.8rem;letter-spacing:.06em;border-top:1px solid rgba(255,255,255,.06)}
+
+  /* ---------- Toast ---------- */
+  #toast{
+    position:fixed;left:50%;bottom:30px;transform:translate(-50%,40px);z-index:120;opacity:0;pointer-events:none;
+    background:linear-gradient(120deg,var(--gold-soft),var(--gold));color:#1a0f33;font-weight:500;font-size:.85rem;font-family:var(--sans);
+    padding:12px 24px;border-radius:999px;transition:.4s;max-width:90vw;text-align:center;
+  }
+  #toast.show{opacity:1;transform:translate(-50%,0)}
+
+  @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  @keyframes blink{50%{opacity:0}}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(232,194,122,.5)}70%{box-shadow:0 0 0 16px rgba(232,194,122,0)}100%{box-shadow:0 0 0 0 rgba(232,194,122,0)}}
+  @media (max-width:560px){.grid{grid-template-columns:1fr}.brand{font-size:1.5rem}.pill span.lbl{display:none}.lang-btn{min-width:110px;padding:13px 22px}}
+  @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body class="locked" data-lang="en">
+
+<canvas id="sky"></canvas>
+
+<!-- Intro: name types out, then she picks a language -->
+<section id="intro" aria-label="Welcome">
+  <div class="small">Something written only for you…</div>
+  <h1 aria-label="Dhuli"><span id="typed"></span><span class="caret"></span></h1>
+  <div class="sub" id="introSub">Shayari &nbsp;·&nbsp; Poetry &nbsp;·&nbsp; One heart</div>
+  <div class="choose" id="choose">
+    <div class="label">Choose your language &nbsp;·&nbsp; भाषा चुनें &nbsp;·&nbsp; ભાષા પસંદ કરો</div>
+    <div class="lang-row">
+      <button class="lang-btn" data-pick="en">English</button>
+      <button class="lang-btn" data-pick="hi">हिन्दी</button>
+      <button class="lang-btn" data-pick="gu">ગુજરાતી</button>
+    </div>
+  </div>
+  <div class="hint" id="introHint">Tip: turn your sound on for the full feeling</div>
+</section>
+
+<header>
+  <nav>
+    <div class="brand" data-i18n="brand">Dhuli</div>
+    <div class="nav-actions">
+      <div class="langs" role="group" aria-label="Language">
+        <button data-lang-set="en">EN</button>
+        <button data-lang-set="hi">हिं</button>
+        <button data-lang-set="gu">ગુ</button>
+      </div>
+      <button class="pill" id="musicBtn" aria-pressed="false">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+        <span class="lbl" id="musicLbl">Music off</span>
+      </button>
+      <button class="pill" id="favBtn" aria-pressed="false">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+        <span class="lbl" data-i18n="favorites">Favorites</span> <span class="count" id="favCount">0</span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="hero">
+    <div class="eyebrow" data-i18n="eyebrow"></div>
+    <h2 data-i18n="h2"></h2>
+    <p data-i18n="heroP"></p>
+    <div class="divider">✦</div>
+  </div>
+</header>
+
+<main>
+  <div class="tabs" role="tablist">
+    <button class="tab active" data-tab="shayari" role="tab" data-i18n="tabShayari">Shayari</button>
+    <button class="tab" data-tab="poetry" role="tab" data-i18n="tabPoetry">Poetry</button>
+  </div>
+  <div class="wrap"><div class="grid" id="grid"></div></div>
+
+  <section class="closing">
+    <div class="big" data-i18n="closingBig"></div>
+    <p data-i18n="closingP"></p>
+    <div class="sign">— <span id="fromName"></span></div>
+  </section>
+</main>
+
+<footer><span data-i18n="footer"></span> &nbsp;·&nbsp; <span id="year"></span></footer>
+
+<div id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+  <div class="sheet" id="sheet">
+    <button class="icon-btn close" id="mClose" aria-label="Close">
+      <svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <h3 id="mTitle"></h3>
+    <div class="lines" id="mLines"></div>
+    <div class="sign" style="text-align:right"><span id="mFrom"></span></div>
+    <div class="actions" id="mActions"></div>
+  </div>
+</div>
+<div id="toast"></div>
+
+<script>
+/* ================= CONFIG — edit these ================= */
+const MUSIC_URL = "";   // optional: path/URL to your own mp3. Leave empty to use the built-in soft ambient music.
+const NAMES = {          // her name and your name, shown in each language
+  en:{her:"Dhuli", you:"Jay", pen:"-dvij"},
+  hi:{her:"धुली",  you:"जय",  pen:"-द्विज"},
+  gu:{her:"ધુલી",  you:"જય",  pen:"-દ્વિજ"}
+};
+/* ======================================================== */
+
+/* ---------- Interface text ---------- */
+const UI = {
+  en:{
+    brand:"Dhuli", eyebrow:"A little universe, for you",
+    h2:"Words I could never<br>say <em>out loud</em>",
+    heroP:"So I wrote them down, one line at a time, every one of them yours.",
+    tabShayari:"Shayari", tabPoetry:"Poetry", favorites:"Favorites",
+    musicOn:"Music on", musicOff:"Music off",
+    shayari:"Shayari", poem:"Poem", read:"Read full poem →", yourFavs:"Your favorites",
+    empty:"No favorites yet.<br>Tap the ♥ on any line that touches you.",
+    closingBig:"Always yours", closingP:"If love has a language, this is every word I know.",
+    footer:"Made with love, for Dhuli", forHer:"for Dhuli",
+    tCopied:"Copied. Send it to someone you love ♥", tCopyFail:"Couldn't copy on this browser",
+    tFavAdd:"Added to favorites ♥", tFavRem:"Removed from favorites", shareTitle:"A shayari for Dhuli"
+  },
+  hi:{
+    brand:"धुली", eyebrow:"एक छोटी-सी दुनिया, सिर्फ़ तुम्हारे लिए",
+    h2:"वो बातें जो कभी<br>कह न सका <em>ज़ुबान से</em>",
+    heroP:"इसलिए लिख दीं, एक-एक पंक्ति करके, और हर पंक्ति सिर्फ़ तुम्हारी है।",
+    tabShayari:"शायरी", tabPoetry:"कविता", favorites:"पसंदीदा",
+    musicOn:"संगीत चालू", musicOff:"संगीत बंद",
+    shayari:"शायरी", poem:"कविता", read:"पूरी कविता पढ़ें →", yourFavs:"तुम्हारी पसंदीदा",
+    empty:"अभी कोई पसंदीदा नहीं।<br>जो पंक्ति दिल को छू जाए, उस पर ♥ दबाओ।",
+    closingBig:"हमेशा तुम्हारा", closingP:"अगर प्यार की कोई भाषा होती है, तो यही मेरे सारे शब्द हैं।",
+    footer:"धुली के लिए, ढेर सारे प्यार के साथ", forHer:"धुली के लिए",
+    tCopied:"कॉपी हो गया ♥", tCopyFail:"इस ब्राउज़र में कॉपी नहीं हो सका",
+    tFavAdd:"पसंदीदा में जोड़ा ♥", tFavRem:"पसंदीदा से हटाया", shareTitle:"धुली के लिए एक शायरी"
+  },
+  gu:{
+    brand:"ધુલી", eyebrow:"એક નાનકડી દુનિયા, ફક્ત તારા માટે",
+    h2:"જે વાતો ક્યારેય<br>બોલી ન શક્યો <em>શબ્દોમાં</em>",
+    heroP:"એટલે લખી નાખી, એક-એક પંક્તિ કરીને, અને દરેક પંક્તિ ફક્ત તારી છે.",
+    tabShayari:"શાયરી", tabPoetry:"કવિતા", favorites:"મનપસંદ",
+    musicOn:"સંગીત ચાલુ", musicOff:"સંગીત બંધ",
+    shayari:"શાયરી", poem:"કવિતા", read:"આખી કવિતા વાંચો →", yourFavs:"તારી મનપસંદ",
+    empty:"હજી કોઈ મનપસંદ નથી.<br>જે પંક્તિ દિલને સ્પર્શી જાય, તેના પર ♥ દબાવ.",
+    closingBig:"હંમેશા તારો", closingP:"જો પ્રેમની કોઈ ભાષા હોય, તો આ જ મારા બધા શબ્દો છે.",
+    footer:"ધુલી માટે, ઢગલાબંધ પ્રેમ સાથે", forHer:"ધુલી માટે",
+    tCopied:"કૉપિ થઈ ગયું ♥", tCopyFail:"આ બ્રાઉઝરમાં કૉપિ ન થઈ શક્યું",
+    tFavAdd:"મનપસંદમાં ઉમેર્યું ♥", tFavRem:"મનપસંદમાંથી દૂર કર્યું", shareTitle:"ધુલી માટે એક શાયરી"
+  }
+};
+
+/* ---------- Content: 10 shayari + 10 poems per language (all different) ---------- */
+const DATA = {
+en:{
+  shayari:[
+    ["The moon keeps asking the night where its light went missing.","The night only smiles, and points toward you."],
+    ["I never believed in fate, until the day","my ordinary life quietly bent toward you."],
+    ["Your silence has a language of its own,","and somehow my heart became fluent in it."],
+    ["Let the world chase the horizon;","I have found the only place I wish to arrive: you."],
+    ["Some people are a season, passing and sweet.","You are the whole sky that holds them all."],
+    ["If love were a prayer, I would say your name","and never need another word."],
+    ["Tea grows cold and clocks forget their hours","whenever your laughter walks into the room."],
+    ["I searched for poetry in books and in rain,","then you tilted your head, and I stopped searching."],
+    ["Distance is only arithmetic,","and my heart never learned how to count it."],
+    ["Grow old beside me, my love;","I will turn every ordinary evening into a poem."]
+  ],
+  poems:[
+    {t:"Her Name Is a Season", l:["Some names are only sounds.","Yours is a weather —","the hush before the monsoon,","the first rain on waiting earth,","that scent the whole world pauses for.","I say it softly, the way one says","a prayer they do not want to finish.","Dhuli.","And something ancient in me","unclenches like a hand,","remembers it was made","to hold something this gentle."]},
+    {t:"Monsoon Heart", l:["I used to be a dry season,","cracked, polite, and sure of nothing.","Then you arrived without announcement,","the way clouds gather, the way","good things always do.","Now every ordinary day","smells like beginning.","I stand in the downpour of you,","arms open, shameless, grateful —","let the whole sky fall;","I was thirsty for years."]},
+    {t:"The Quiet Way You Love", l:["You do not love loudly.","You love in the small hours:","a message asking if I ate,","a hand that finds mine in a crowd,","the patience you hold like a lamp","when my words come out crooked.","The world sells grand gestures.","I would trade them all for this —","the steady, unhurried miracle","of being understood."]},
+    {t:"If Mornings Had a Face", l:["If mornings had a face,","it would be yours, half-asleep,","hair undecided, smile arriving late","like sunlight through a curtain.","I would memorize it","the way sailors memorize stars.","Let the alarms ring.","Let the day wait.","I have found the only sunrise","that never needs the sky."]},
+    {t:"Letters to the Future", l:["Dear years ahead —","be gentle with her.","She laughs with her whole face,","she carries other people's worries","as if they were hers to keep.","Give her slow Sundays.","Give her rooms that smell of rain and chai.","And if you must take something,","take my fear, my hurry, my pride —","leave me only enough","to stand beside her","through whatever you bring."]},
+    {t:"Constellation of Two", l:["Alone, we were scattered lights,","each one beautiful, each one lonely,","unaware of the shape we could make.","Then two stars leaned close","and a story drew itself across the dark.","Call it chance, call it chemistry,","call it the universe tidying its sky.","I only know that when I look up now,","I do not ask what the stars mean —","I look for you in them."]},
+    {t:"Chai at Midnight", l:["The city sleeps; the kettle sings.","Two cups, steam curling like small thoughts","we do not need to say.","You talk about nothing and everything,","and I learn that happiness","can be a balcony, a blanket,","and your voice going soft near one a.m.","If this is all there ever is —","the warm cup, the quiet, you —","then I am the richest man","the night has ever known."]},
+    {t:"What I Know About Home", l:["I used to think home was a place:","a door, a key, an address.","Now I know it is the way","my shoulders drop when you laugh.","It is the sound of your name","in a room I have just entered.","Wherever you are, the walls remember","how to be warm.","So if I am ever lost,","do not send a map.","Just stay exactly who you are."]},
+    {t:"Promise Under the Moon", l:["I cannot promise a life without storms.","I can promise to hold the umbrella,","and to get wet beside you","when it is not enough.","I cannot promise I will never fall silent.","I can promise to return","with the right words, or none at all.","Honesty in the daylight,","tenderness in the dark,","and a heart that chooses you","again, every morning,","quietly, on purpose."]},
+    {t:"Forever, Plainly", l:["No grand finale, no fireworks —","just this:","I want the ordinary years with you.","Grey hair and grocery lists,","the same joke retold, still funny.","I want to be the one","you call with good news first.","I want my last thought","to be the same as my first —","you.","Dhuli, if love has a language,","this is every word I know."]}
+  ]
+},
+hi:{
+  shayari:[
+    ["तेरी आँखों में जो एक पूरा आसमान ठहरा है,","मैं रोज़ उसमें खोकर ख़ुद को पा लेता हूँ।"],
+    ["चाँद से कह दो आज ज़रा देर से निकले,","मुझे अपने चाँद से अभी बहुत बातें करनी हैं।"],
+    ["तू मिली तो लगा, दुआओं में असर होता है,","वरना हम तो हाथ उठाना भी भूल चुके थे।"],
+    ["तेरे नाम की ख़ुशबू है मेरी हर साँस में,","अब ख़ुद से ज़्यादा मैं तुझमें रहता हूँ।"],
+    ["सफ़र लंबा सही, मंज़िल की मुझे फ़िक्र नहीं,","तेरा हाथ मेरे हाथ में हो, तो रास्ता ख़ुद हसीन है।"],
+    ["बारिश की हर बूँद पर तेरा ही नाम लिखा है,","भीगना मेरी मजबूरी नहीं, मेरी मोहब्बत है।"],
+    ["लोग कहते हैं इश्क़ में नींदें उड़ जाती हैं,","मुझे तो तुझे सोचकर ही सुकून की नींद आती है।"],
+    ["तुझसे मिलकर जाना कि घर किसे कहते हैं,","दीवारों से नहीं, किसी के होने से बनता है।"],
+    ["वक़्त ने बहुत कुछ छीना, पर तुझे न छीन सका,","तू मेरी क़िस्मत की सबसे ज़िद्दी लकीर है।"],
+    ["जब तक साँस है, तेरा इंतज़ार भी मोहब्बत है,","और तू साथ हो तो हर लम्हा त्योहार है।"]
+  ],
+  poems:[
+    {t:"पहली मुलाक़ात", l:["उस दिन कुछ भी ख़ास नहीं था,","न कोई मौसम, न कोई इशारा,","बस तुम थीं, और अचानक","दुनिया का शोर धीमा पड़ गया।","मैंने सोचा नहीं था कि","एक मुस्कान किसी की","पूरी क़िस्मत बदल सकती है।","आज भी जब वो दिन याद आता है,","तो लगता है, वक़्त ने","मुझे तुम तक पहुँचाने के लिए","सारे रास्ते ख़ुद ही बनाए थे।"]},
+    {t:"मौसम", l:["तुम्हारे साथ हर मौसम","अपना-सा लगता है।","गर्मी में तुम छाँव हो,","सर्दी में गुनगुनी धूप,","और बारिश में तो तुम","ख़ुद एक मौसम हो।","मैंने कैलेंडर देखना छोड़ दिया,","अब तारीख़ें नहीं,","तुम्हारी मुस्कान से","दिन पहचानता हूँ।"]},
+    {t:"तुम्हारा नाम", l:["तुम्हारा नाम लिखता हूँ तो","स्याही भी मुस्कुरा देती है,","काग़ज़ महक उठता है","पहली बारिश की मिट्टी-सा।","धुली, ये नाम नहीं,","एक दुआ है जो","मेरी ज़ुबान पर आकर","कविता बन जाती है।","मैं बार-बार इसे दोहराता हूँ,","जैसे कोई मंत्र,","जिसके बिना मेरा दिन","पूरा नहीं होता।"]},
+    {t:"इंतज़ार", l:["मैंने सीखा है इंतज़ार करना,","शाम को सूरज का,","रात को सुबह का,","और हर रोज़ तुम्हारे एक संदेश का।","इंतज़ार बुरा नहीं होता,","अगर उसके आख़िर में","तुम्हारी आवाज़ हो।","तुम आओ तो","हर देर माफ़ है,","हर दूरी छोटी है।"]},
+    {t:"तुम्हारी हँसी", l:["तुम हँसती हो तो","जैसे कहीं घंटियाँ बज उठती हैं,","और मेरे भीतर का","उदास कोना भी","रोशनी से भर जाता है।","काश मैं इस हँसी को","बोतल में भर सकता,","और जब भी दिन भारी हो,","थोड़ा-सा खोलकर","फिर से जी उठता।"]},
+    {t:"साथ चलना", l:["ज़िंदगी कोई सीधी सड़क नहीं,","मोड़ हैं, गड्ढे हैं, धूप है, आँधी है।","पर मैं डरता नहीं,","क्योंकि जानता हूँ,","हर मोड़ पर तुम","मेरा हाथ थामे खड़ी होगी।","हम गिरेंगे भी तो साथ,","उठेंगे भी तो साथ,","और हँसकर कहेंगे,","“चलो, आगे चलते हैं।”"]},
+    {t:"रात का चाँद", l:["आज चाँद कुछ उदास था,","मैंने पूछा, “क्या हुआ?”","बोला, “तुम्हारे जैसा कोई","मुझे आज तक नहीं मिला।”","मैं हँस पड़ा, और कहा,","“वो तो मेरी है, भाई,","तू बस आसमान सँभाल,","मैं अपनी धरती सँभालता हूँ।”"]},
+    {t:"वादा", l:["मैं चाँद-तारे नहीं तोड़ लाऊँगा,","ऐसे झूठे वादे नहीं करता।","पर इतना कहता हूँ,","जब तुम थक जाओगी,","मेरा काँधा हाज़िर होगा।","जब तुम रोओगी,","मैं चुप रहकर भी","तुम्हारे साथ रोऊँगा।","और जब तुम हँसोगी,","तो मैं दुनिया का","सबसे ख़ुशनसीब इंसान बन जाऊँगा।"]},
+    {t:"मेरा घर", l:["लोग पूछते हैं, तुम्हारा घर कहाँ है?","मैं मुस्कुराकर कह देता हूँ,","जहाँ तुम हो।","न ईंटें, न दीवारें,","न कोई पता चाहिए,","तुम्हारे पास बैठना ही","मेरा घर लौट आना है।","थका हुआ मन","तुम्हारे साथ","सबसे गहरी नींद सोता है।"]},
+    {t:"तुम्हारी आवाज़", l:["तुम्हारी आवाज़ में","कुछ तो है जादू,","थके हुए दिन को","एक पल में सँवार देती है।","फ़ोन की स्क्रीन पर","तुम्हारा नाम चमकता है,","और दिल बच्चों की तरह","दौड़ पड़ता है।","धुली, मेरी हर सुबह","तुम्हारी आवाज़ से शुरू हो,","बस यही दुआ है।"]}
+  ]
+},
+gu:{
+  shayari:[
+    ["ગુલાબને પૂછ્યું, આટલી સુગંધ ક્યાંથી લાવ્યું?","તો બોલ્યું, ધુલીના સ્મિતની ઉધાર લીધી છે."],
+    ["ચાની પ્યાલીમાં ખાંડ ઓછી હતી,","તારું નામ લીધું ને બધું મીઠું થઈ ગયું."],
+    ["સાંજના રંગો રોજ બદલાય છે,","પણ તારી યાદનો રંગ કદી ઝાંખો નથી પડતો."],
+    ["દરિયાને ઊંડાણનું અભિમાન હતું,","પછી એણે મારા પ્રેમની ઊંડાઈ જોઈ."],
+    ["તું હોય તો ગામ પણ શહેર જેવું લાગે,","ને તું ન હોય તો શહેર પણ સૂનું લાગે."],
+    ["ઘણા ચહેરા જોયા આ જિંદગીના મેળામાં,","પણ મન તો તારી પાસે આવીને જ અટક્યું."],
+    ["કાગળ પર તારું નામ લખ્યું,","ને શબ્દો જાતે જ કવિતા બની ગયા."],
+    ["વર્ષો વીતશે, વાળ સફેદ થશે,","પણ તારા માટેની મારી નજર એ જ રહેશે."],
+    ["વાદળે વરસવાની રજા માંગી,","મેં કહ્યું, જા, પણ ધુલીને હળવેથી સ્પર્શજે."],
+    ["મારી દુનિયા નાની છે,","પણ એમાં તું છે, એટલે મારે બધું છે."]
+  ],
+  poems:[
+    {t:"તારું સ્મિત", l:["સવારના સૂરજને પણ","થોડી ઈર્ષા થાય છે,","જ્યારે તું હસે છે.","તારા હોઠ પર ફેલાતી એ ક્ષણમાં","આખું ઘર ઝળહળી ઊઠે છે,","અને હું વિચારું છું,","ભગવાને આટલી સુંદર ભેટ","મારા માટે કેમ રાખી હશે?","મારી પાસે જવાબ નથી,","બસ આભાર છે, અપાર."]},
+    {t:"પતંગ", l:["ઉત્તરાયણની સવાર હતી,","આકાશ રંગોથી ભરાઈ ગયું,","પણ મારી નજર","એક જ પતંગ પર અટકી,","જેની દોર તારા હાથમાં હતી.","હું સમજી ગયો,","હું પણ એક પતંગ છું,","અને મારી દોર","ક્યારનીય તને સોંપાઈ ગઈ છે.","હવે ઊંચે ઉડાડ કે નીચે ઉતાર,","બસ છોડતી નહીં."]},
+    {t:"મારી ડાયરી", l:["મારી ડાયરીનું દરેક પાનું","તારા નામથી ભરાઈ ગયું છે.","સવારે શું ખાધું, એ ભૂલી જાઉં,","પણ તેં શું કહ્યું, એ યાદ રહે.","જો ક્યારેક આ ડાયરી ખોવાઈ જાય,","તો ચિંતા નહીં,","કારણ કે તું","મારા હૃદયમાં","પહેલેથી છપાયેલી છે."]},
+    {t:"દરિયાકિનારે", l:["રેતી પર બે જોડી પગલાં,","એક મારાં, એક તારાં.","મોજું આવ્યું ને","બંનેને એક સાથે ભૂંસી ગયું.","મેં કહ્યું, કંઈ નહીં,","પગલાં ભૂંસાય તો શું,","આપણો રસ્તો તો","હૃદય પર લખાયેલો છે."]},
+    {t:"તારી આંખો", l:["તારી આંખોમાં બે દીવા બળે છે,","જેના અજવાળે હું","મારા અંધારા ખૂણા શોધી લઉં છું.","ને જે ખૂણા પહેલાં ડરાવતા હતા,","તે હવે ઘર જેવા લાગે છે.","એટલે જ તો હું","નજર હટાવતો નથી,","કારણ કે અજવાળું","ક્યારેય છોડવા જેવું નથી હોતું."]},
+    {t:"ગરબો", l:["જો ક્યારેક નવરાત્રિની રાતે","તું મારી સામે આવી જાય,","તો ઢોલ પણ","થોડી વાર ધબકવાનું ભૂલી જાય.","તારા ઘેરદાર ઘાઘરાનો ઘેરાવ,","ને દીવાની જ્યોતમાં તારો ચહેરો,","હું તાલ ચૂકી જાઉં તો માફ કરજે,","કારણ કે મારો તાલ","પહેલેથી તારા નામે ધબકે છે."]},
+    {t:"નાની નાની વાતો", l:["તારી નાની નાની વાતો,","જેમ કે “જમ્યો?” ને “સાચવજે”,","મારા માટે આખા ગ્રંથ છે.","મોટી ભેટો ભુલાઈ જાય છે,","પણ આ નાના શબ્દો","દિવસભર સાથે ચાલે છે,","ખિસ્સામાં મૂકેલા સિક્કાની જેમ,","જે ખખડે ત્યારે","હું જાણું છું, હું ધનવાન છું."]},
+    {t:"તારામંડળ", l:["રાતે અગાસીએ સૂઈને","તારા ગણું છું,","એક, બે, ત્રણ…","અને દરેક ગણતરીના અંતે","તારો ચહેરો આવે છે.","ખબર નથી,","તારા ઓછા પડે છે,","કે તારી યાદ વધુ છે.","ધુલી, તું મારું","સૌથી તેજસ્વી તારામંડળ છે."]},
+    {t:"મારી પ્રાર્થના", l:["મંદિરમાં જાઉં છું ત્યારે","હવે કંઈ માંગતો નથી,","કારણ કે જે જોઈતું હતું,","તે તો તું છે,","અને તે ભગવાને","પહેલેથી આપી દીધું છે.","હું ફક્ત આભાર કહું છું,","ને તારા સુખની","એક નાની પ્રાર્થના કરું છું."]},
+    {t:"આખું જીવન", l:["જ્યારે ઘડપણ આવશે,","ને હાથમાં લાકડી હશે,","ત્યારે પણ સાંજે તારી સાથે","બાંકડે બેસીને","જૂની વાતો વાગોળીશ.","તું કહીશ, “કેટલું બદલાઈ ગયું”,","ને હું કહીશ, “ના,","તું તો એવી જ છે,","જેવી પહેલી વાર જોઈ હતી.”","ધુલી, આ મારી છેલ્લી નહીં,","પહેલી ઇચ્છા છે."]}
+  ]
+}
+};
+
+/* ---------- Build the item list ---------- */
+const LANGS = ["en","hi","gu"];
+const items = [];
+LANGS.forEach(lg=>{
+  DATA[lg].shayari.forEach((l,i)=>items.push({id:`${lg}-s${i+1}`,lang:lg,type:"shayari",n:i+1,title:null,lines:l}));
+  DATA[lg].poems.forEach((p,i)=>items.push({id:`${lg}-p${i+1}`,lang:lg,type:"poetry",n:i+1,title:p.t,lines:p.l}));
+});
+const byId = Object.fromEntries(items.map(i=>[i.id,i]));
+
+/* ---------- Safe storage (migrates old English-only favorites) ---------- */
+let favs = new Set();
+try{
+  const raw = JSON.parse(localStorage.getItem("dhuli_favs")||"[]");
+  favs = new Set(raw.map(id=>id.includes("-")?id:"en-"+id).filter(id=>byId[id]));
+}catch(e){}
+const saveFavs = ()=>{ try{ localStorage.setItem("dhuli_favs",JSON.stringify([...favs])); }catch(e){} };
+
+/* ---------- Helpers ---------- */
+const $ = s=>document.querySelector(s);
+const esc = s=>s.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+const toastEl = $("#toast"); let toastT;
+function toast(msg){ toastEl.textContent=msg; toastEl.classList.add("show"); clearTimeout(toastT); toastT=setTimeout(()=>toastEl.classList.remove("show"),2200); }
+let currentLang="en", currentTab="shayari", showFavs=false;
+const t = k => UI[currentLang][k];
+const textOf = it => (it.title?it.title+"\n\n":"") + it.lines.join("\n") + `\n\n${NAMES[it.lang].pen}`;
+async function copyText(it){
+  try{ await navigator.clipboard.writeText(textOf(it)); toast(t("tCopied")); }
+  catch(e){ toast(t("tCopyFail")); }
+}
+async function shareIt(it){
+  if(navigator.share){ try{ await navigator.share({title:it.title||UI[it.lang].shareTitle,text:textOf(it)}); return; }catch(e){ if(e.name==="AbortError") return; } }
+  copyText(it);
+}
+const ICONS = {
+  heart:'<svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg>',
+  copy:'<svg viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>',
+  share:'<svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>'
+};
+
+/* ---------- Render ---------- */
+const grid = $("#grid");
+const io = new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target);} }),{threshold:.12});
+
+function cardHTML(it){
+  const poem = it.type==="poetry", U = UI[it.lang];
+  const preview = poem ? it.lines.slice(0,4) : it.lines;
+  return `
+  <article class="card" data-id="${it.id}" data-l="${it.lang}">
+    <div class="num">${poem?U.poem:U.shayari} · ${String(it.n).padStart(2,"0")}</div>
+    ${poem?`<div class="title">${esc(it.title)}</div>`:""}
+    <div class="text">${preview.map(l=>`<span>${esc(l)}</span>`).join("")}</div>
+    ${poem?`<div class="more">…</div>`:""}
+    <div class="pen">${NAMES[it.lang].pen}</div>
+    <div class="actions">
+      <button class="icon-btn fav ${favs.has(it.id)?"on":""}" data-act="fav" aria-label="Favorite">${ICONS.heart}</button>
+      <button class="icon-btn" data-act="copy" aria-label="Copy">${ICONS.copy}</button>
+      <button class="icon-btn" data-act="share" aria-label="Share">${ICONS.share}</button>
+      ${poem?`<button class="read" data-act="read">${U.read}</button>`:""}
+    </div>
+  </article>`;
+}
+function render(){
+  const list = showFavs ? items.filter(i=>favs.has(i.id)) : items.filter(i=>i.lang===currentLang && i.type===currentTab);
+  grid.innerHTML = list.length
+    ? (showFavs?`<div class="section-title">${t("yourFavs")}</div>`:"") + list.map(cardHTML).join("")
+    : `<div class="empty">${t("empty")}</div>`;
+  grid.querySelectorAll(".card").forEach((c,i)=>{ c.style.transitionDelay=(i%6)*70+"ms"; io.observe(c); });
+  $("#favCount").textContent = favs.size;
+  $("#favBtn").classList.toggle("on",showFavs);
+  $("#favBtn").setAttribute("aria-pressed",showFavs);
+  document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",!showFavs && b.dataset.tab===currentTab));
+}
+function toggleFav(id){
+  favs.has(id)?favs.delete(id):favs.add(id); saveFavs();
+  if(showFavs) render(); else {
+    $("#favCount").textContent=favs.size;
+    document.querySelectorAll(`[data-id="${id}"] .fav, #mActions .fav`).forEach(b=>b.classList.toggle("on",favs.has(id)));
+  }
+  toast(favs.has(id)?t("tFavAdd"):t("tFavRem"));
+}
+
+grid.addEventListener("click",e=>{
+  const b = e.target.closest("[data-act]"); if(!b) return;
+  const it = byId[b.closest(".card").dataset.id];
+  ({fav:()=>toggleFav(it.id),copy:()=>copyText(it),share:()=>shareIt(it),read:()=>openModal(it)})[b.dataset.act]();
+});
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{ currentTab=b.dataset.tab; showFavs=false; render(); });
+$("#favBtn").onclick=()=>{ showFavs=!showFavs; render(); };
+
+/* ---------- Language ---------- */
+function applyLang(lg){
+  currentLang = lg;
+  document.body.dataset.lang = lg;
+  document.documentElement.lang = lg;
+  document.querySelectorAll("[data-i18n]").forEach(el=>{ el.innerHTML = UI[lg][el.dataset.i18n]; });
+  document.querySelectorAll("[data-lang-set]").forEach(b=>b.classList.toggle("active",b.dataset.langSet===lg));
+  $("#fromName").textContent = NAMES[lg].you;
+  document.title = lg==="en" ? "For Dhuli — Shayari & Poetry" : `${NAMES[lg].her} — ${UI[lg].tabShayari} · ${UI[lg].tabPoetry}`;
+  setMusicUI();
+  render();
+}
+document.querySelectorAll("[data-lang-set]").forEach(b=>b.onclick=()=>{ if(modal.classList.contains("open")) closeModal(); applyLang(b.dataset.langSet); window.scrollTo({top:0,behavior:"smooth"}); });
+
+/* ---------- Modal ---------- */
+const modal=$("#modal");
+function openModal(it){
+  $("#sheet").dataset.l = it.lang;
+  $("#mTitle").textContent = it.title;
+  $("#mFrom").textContent = NAMES[it.lang].pen;
+  $("#mLines").innerHTML = it.lines.map((l,i)=>`<span style="animation-delay:${.15+i*.28}s">${esc(l)}</span>`).join("");
+  $("#mActions").innerHTML = `
+    <button class="icon-btn fav ${favs.has(it.id)?"on":""}" aria-label="Favorite">${ICONS.heart}</button>
+    <button class="icon-btn" data-c aria-label="Copy">${ICONS.copy}</button>
+    <button class="icon-btn" data-s aria-label="Share">${ICONS.share}</button>`;
+  const a=$("#mActions");
+  a.querySelector(".fav").onclick=()=>toggleFav(it.id);
+  a.querySelector("[data-c]").onclick=()=>copyText(it);
+  a.querySelector("[data-s]").onclick=()=>shareIt(it);
+  modal.classList.add("open"); document.body.classList.add("locked");
+  $("#mClose").focus();
+}
+function closeModal(){ modal.classList.remove("open"); document.body.classList.remove("locked"); }
+$("#mClose").onclick=closeModal;
+modal.addEventListener("click",e=>{ if(e.target===modal) closeModal(); });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeModal(); });
+$("#year").textContent = new Date().getFullYear();
+
+/* ---------- Intro: type her name, then choose a language ---------- */
+(function intro(){
+  const el=$("#typed"), name=NAMES.en.her; let i=0;
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function type(){
+    el.textContent = name.slice(0,++i);
+    if(i<name.length) setTimeout(type,260);
+    else setTimeout(()=>{ $("#introSub").classList.add("show"); setTimeout(()=>{ $("#choose").classList.add("show"); $("#introHint").classList.add("show"); },900); },500);
+  }
+  setTimeout(type, reduce?0:1500);
+})();
+document.querySelectorAll("[data-pick]").forEach(b=>b.onclick=()=>{
+  applyLang(b.dataset.pick);
+  $("#intro").classList.add("gone");
+  document.body.classList.remove("locked");
+  startMusic(); burstPetals();
+  setTimeout(()=>$("#intro").remove(),1400);
+});
+
+/* ---------- Music (built-in ambient, or your own file) ---------- */
+let music = {on:false,ctx:null,master:null,timer:null,audio:null};
+const CHORDS=[[220,261.63,329.63,440],[174.61,220,261.63,349.23],[261.63,329.63,392,523.25],[196,246.94,293.66,392]];
+function pad(freqs,tm,dur){
+  const {ctx,master}=music;
+  freqs.forEach((f,i)=>{
+    [0,6].forEach(det=>{
+      const o=ctx.createOscillator(), g=ctx.createGain(), lp=ctx.createBiquadFilter();
+      o.type=i%2?"triangle":"sine"; o.frequency.value=f; o.detune.value=det-3;
+      lp.type="lowpass"; lp.frequency.value=1100;
+      g.gain.setValueAtTime(0,tm);
+      g.gain.linearRampToValueAtTime(.05,tm+dur*.45);
+      g.gain.linearRampToValueAtTime(0,tm+dur+1.5);
+      o.connect(lp).connect(g).connect(master);
+      o.start(tm); o.stop(tm+dur+1.6);
+    });
+  });
+}
+function startMusic(){
+  if(music.on) return;
+  try{
+    if(MUSIC_URL){
+      music.audio = music.audio || Object.assign(new Audio(MUSIC_URL),{loop:true,volume:.5});
+      music.audio.play().catch(()=>{});
+    }else{
+      const AC=window.AudioContext||window.webkitAudioContext;
+      music.ctx = music.ctx || new AC();
+      music.ctx.resume();
+      if(!music.master){ music.master=music.ctx.createGain(); music.master.gain.value=0; music.master.connect(music.ctx.destination); }
+      music.master.gain.cancelScheduledValues(music.ctx.currentTime);
+      music.master.gain.linearRampToValueAtTime(1,music.ctx.currentTime+2);
+      let k=0; const step=()=>{ pad(CHORDS[k++%CHORDS.length],music.ctx.currentTime+.05,4.2); };
+      step(); music.timer=setInterval(step,4000);
+    }
+    music.on=true; setMusicUI();
+  }catch(e){ music.on=false; setMusicUI(); }
+}
+function stopMusic(){
+  if(MUSIC_URL){ music.audio&&music.audio.pause(); }
+  else if(music.ctx){
+    clearInterval(music.timer);
+    music.master.gain.cancelScheduledValues(music.ctx.currentTime);
+    music.master.gain.linearRampToValueAtTime(0,music.ctx.currentTime+1);
+  }
+  music.on=false; setMusicUI();
+}
+function setMusicUI(){
+  $("#musicLbl").textContent = music.on?t("musicOn"):t("musicOff");
+  $("#musicBtn").classList.toggle("on",music.on);
+  $("#musicBtn").setAttribute("aria-pressed",music.on);
+}
+$("#musicBtn").onclick=()=> music.on?stopMusic():startMusic();
+
+/* ---------- Starfield + petals ---------- */
+const cv=$("#sky"), cx=cv.getContext("2d");
+let W,H,stars=[],petals=[],shooting=null,dpr=Math.min(devicePixelRatio||1,2);
+function resize(){
+  W=innerWidth;H=innerHeight; cv.width=W*dpr; cv.height=H*dpr; cv.style.width=W+"px"; cv.style.height=H+"px"; cx.setTransform(dpr,0,0,dpr,0,0);
+  stars=Array.from({length:Math.round(W*H/7000)},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.3+.2,p:Math.random()*6.28,s:.4+Math.random()*1.4}));
+}
+function newPetal(top=true){
+  return {x:Math.random()*W,y:top?-20:Math.random()*H,s:6+Math.random()*9,vy:.35+Math.random()*.7,vx:-.2+Math.random()*.6,
+    rot:Math.random()*6.28,vr:(Math.random()-.5)*.03,sw:Math.random()*6.28,hue:Math.random()<.7?340:42,a:.35+Math.random()*.45};
+}
+function burstPetals(){ for(let i=0;i<60;i++){ const p=newPetal(); p.y=-Math.random()*H*.6; petals.push(p); } }
+function drawPetal(p){
+  cx.save(); cx.translate(p.x,p.y); cx.rotate(p.rot); cx.globalAlpha=p.a;
+  cx.fillStyle = p.hue===340?"#e98ba7":"#e8c27a";
+  cx.beginPath(); cx.moveTo(0,-p.s); cx.bezierCurveTo(p.s*.9,-p.s*.6,p.s*.7,p.s*.7,0,p.s); cx.bezierCurveTo(-p.s*.7,p.s*.7,-p.s*.9,-p.s*.6,0,-p.s); cx.fill(); cx.restore();
+}
+function frame(ts){
+  cx.clearRect(0,0,W,H);
+  for(const s of stars){ const a=.35+.65*Math.abs(Math.sin(ts/1000*s.s+s.p)); cx.globalAlpha=a; cx.fillStyle="#fff"; cx.beginPath(); cx.arc(s.x,s.y,s.r,0,6.28); cx.fill(); }
+  if(!shooting && Math.random()<.002) shooting={x:Math.random()*W*.7+W*.2,y:Math.random()*H*.3,l:0};
+  if(shooting){ shooting.x-=9; shooting.y+=4.5; shooting.l++; const g=cx.createLinearGradient(shooting.x,shooting.y,shooting.x+90,shooting.y-45);
+    g.addColorStop(0,"rgba(255,240,200,.9)"); g.addColorStop(1,"rgba(255,240,200,0)"); cx.globalAlpha=1; cx.strokeStyle=g; cx.lineWidth=1.6;
+    cx.beginPath(); cx.moveTo(shooting.x,shooting.y); cx.lineTo(shooting.x+90,shooting.y-45); cx.stroke(); if(shooting.l>70) shooting=null; }
+  if(petals.length<26 && Math.random()<.05) petals.push(newPetal());
+  petals=petals.filter(p=>p.y<H+30);
+  for(const p of petals){ p.sw+=.02; p.x+=p.vx+Math.sin(p.sw)*.5; p.y+=p.vy; p.rot+=p.vr; drawPetal(p); }
+  requestAnimationFrame(frame);
+}
+addEventListener("resize",resize); resize();
+for(let i=0;i<14;i++) petals.push(newPetal(false));
+if(!matchMedia("(prefers-reduced-motion: reduce)").matches) requestAnimationFrame(frame);
+
+applyLang("en");
+</script>
+</body>
+</html>
